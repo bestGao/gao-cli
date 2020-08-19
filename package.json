@@ -1,0 +1,29 @@
+{
+  "name": "gao-cli",
+  "version": "0.0.1",
+  "description": "生成api types",
+  "scripts": {
+    "compile": "babel src -d dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yijiang0311/fc-vue-cli"
+  },
+  "homepage": "https://github.com/yijiang0311/fc-vue-cli",
+  "author": "jaygao",
+  "license": "ISC",
+  "bin": {
+    "gao-cli": "./bin/index.js"
+  },
+  "keywords": [
+    "generate-api",
+    "node.js cli"
+  ],
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "commander": "^5.1.0",
+    "inquirer": "^7.3.1",
+    "shelljs": "^0.8.4"
+  }
+}
