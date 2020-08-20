@@ -1,12 +1,12 @@
 const chalk = require('chalk');
 const error = (message) => {
-  console.error(chalk.red(message));
+  process.stdout.write(chalk.red(message));
 };
 const chalkLog = (message) => {
-  console.log(chalk.green(message));
+  process.stdout.write(chalk.magentaBright(message));
 };
 const success = (message) => {
-  console.log(chalk.white.bgGreen.bold(message));
+  process.stdout.write(chalk.white.yellow.bold(message));
 };
 
 module.exports = {

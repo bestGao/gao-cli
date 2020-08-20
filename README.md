@@ -10,5 +10,5 @@
 ```javascript
 gao-cli -v / --version
 gao-cli -h / --help
-gao-cli init
+gao-cli init -o / --override
 ```

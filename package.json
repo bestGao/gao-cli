@@ -21,6 +21,8 @@
     "node.js cli"
   ],
   "dependencies": {
+    "@openapitools/openapi-generator-cli": "^1.0.15-4.3.1",
+    "axios": "^0.19.2",
     "chalk": "^4.1.0",
     "commander": "^5.1.0",
     "inquirer": "^7.3.1",

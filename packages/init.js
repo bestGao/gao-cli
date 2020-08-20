@@ -1,12 +1,22 @@
+const { TypeObjs } = require('./lib/constant')
 const { program } = require('commander');
 const { chalkLog } = require('./lib/util');
 const { version: curVersion } = require('../package.json')
+let isOverride = false
 
 function programInit() {
   program.version(curVersion, '-V, --version', '打印版本号');
-  program.command('init').description('生成接口地址配置文件模板').action(() => {
-    chalkLog('生成接口地址配置文件模板到/scripts/')
+  program.command('init').alias('i').option('-o, --override', '强制覆盖已存在的配置文件').description('生成接口地址配置文件模板').action((dir) => {
+    isOverride = dir.override || false
+    module.exports.isOverride = isOverride
+    chalkLog('生成接口地址配置文件模板到/scripts/\n')
     require('./commands/generate-config')
+  })
+
+  program.command('generate').alias('g').option('-t, --type [type]', '生成模式').description('生成APIs Types').action((dir) => {
+    module.exports.generateType = dir.type
+    chalkLog(`${TypeObjs[dir.type]}\n`)
+    require('./commands/generate')
   })
   // program
   //   .command('init')
@@ -31,4 +41,4 @@ function programInit() {
   program.parse(process.argv);
 }
 
-programInit();
+return programInit();
