@@ -6,7 +6,7 @@ function programInit() {
   program.version(curVersion, '-V, --version', '打印版本号');
   program.command('init').description('生成接口地址配置文件模板').action(() => {
     chalkLog('生成接口地址配置文件模板到/scripts/')
-    require('./commands/generate-api.config')
+    require('./commands/generate-config')
   })
   // program
   //   .command('init')
