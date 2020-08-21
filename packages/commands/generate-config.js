@@ -1,36 +1,56 @@
 'use strict';
+
 const { isOverride } = require('./../init')
 const { chalkLog, error } = require('../lib/util')
 const path = require('path');
 const fs = require('fs');
+const fsPromises = fs.promises
 const originFileurl = path.join(__dirname, './../../template/simple.config.js')
 const scriptUrl = path.join(process.cwd(), 'scripts')
 const fileUrl = path.join(process.cwd(), 'scripts/generate-api.config.js')
 
-try {
-  const stat = fs.statSync(scriptUrl)
-  if (stat.isDirectory()) {
-    chalkLog('scripts目录存在\n')
-    try {
-      if (fs.existsSync(fileUrl)) {
-        chalkLog('配置文件已存在\n');
-        if (isOverride) {
-          fs.copyFileSync(originFileurl, fileUrl);
-          chalkLog('强制生成配置文件\n')
-        }
-        process.exit()
-      } else {
-        chalkLog('scripts目录下generate-api.config.js不存在，在scripts目录下新建\n')
-        fs.copyFileSync(originFileurl, fileUrl);
-      }
-    } catch (err) {
-      error('文件报错\n')
-      console.log(err)
+fsPromises.access(scriptUrl, fs.constants.F_OK).then(() => {
+  chalkLog('scripts目录已存在\n')
+  fsPromises.access(fileUrl, fs.constants.F_OK).then(() => {
+    if (isOverride) {
+      copyFile(isOverride)
+    } else {
+      chalkLog('配置文件已存在')
     }
-    process.exit()
+  }).catch(err => {
+    chalkLog('查找配置文件失败\n')
+    genConfig('file')
+  })
+}).catch((err) => {
+  chalkLog('查找目录scripts失败\n')
+  genConfig('all')
+})
+
+function copyFile(isEnforce = false) {
+  fsPromises.copyFile(originFileurl, fileUrl).then(() => {
+    chalkLog(`${isEnforce ? '强制' : ''}生成配置文件\n`)
+  }).catch(err => {
+    chalkLog('复制文件报错')
+  })
+}
+
+function genFolder(callback = () => { }) {
+  console.log('返回', typeof callback)
+  fsPromises.mkdir(scriptUrl, { recursive: true }).then(() => {
+    chalkLog('自动生成/scripts目录\n')
+    if (callback) { callback() }
+  }).catch(err => {
+    console.log('创建目录scripts失败：', err)
+  })
+}
+
+function genConfig(type = 'all') {
+  if (type === 'file') {
+    copyFile()
+  } else if (type === 'all') {
+    genFolder(copyFile)
   }
-} catch (err) {
-  chalkLog('scripts目录报错\n')
-  fs.mkdirSync(scriptUrl)
-  fs.copyFileSync(originFileurl, fileUrl);
+  else {
+    process.exit('退出init')
+  }
 }
