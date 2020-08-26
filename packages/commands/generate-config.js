@@ -35,7 +35,6 @@ function copyFile(isEnforce = false) {
 }
 
 function genFolder(callback = () => { }) {
-  console.log('返回', typeof callback)
   fsPromises.mkdir(scriptUrl, { recursive: true }).then(() => {
     chalkLog('自动生成/scripts目录\n')
     if (callback) { callback() }
