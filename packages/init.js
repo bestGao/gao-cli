@@ -1,23 +1,39 @@
-const { TypeObjs } = require('./lib/constant')
-const { program } = require('commander');
-const { chalkLog } = require('./lib/util');
-const { version: curVersion } = require('../package.json')
-let isOverride = false
+const { TypeObjs } = require("./lib/constant");
+const { program } = require("commander");
+const { chalkLog, error } = require("./lib/util");
+const { version: curVersion } = require("../package.json");
+let isOverride = false;
 
 function programInit() {
-  program.version(curVersion, '-V, --version', '打印版本号');
-  program.command('init').alias('i').option('-o, --override', '强制覆盖已存在的配置文件').description('生成接口地址配置文件模板').action((dir) => {
-    isOverride = dir.override || false
-    module.exports.isOverride = isOverride
-    chalkLog('生成接口地址配置文件模板到/scripts/\n')
-    require('./commands/generate-config')
-  })
+  program.version(curVersion, "-V, --version", "打印版本号");
+  program
+    .command("init")
+    .alias("i")
+    .option("-o, --override", "强制覆盖已存在的配置文件")
+    .description("生成接口地址配置文件模板")
+    .action((dir) => {
+      isOverride = dir.override || false;
+      module.exports.isOverride = isOverride;
+      chalkLog("生成接口地址配置文件模板到/scripts/\n");
+      require("./commands/generate-config");
+    });
 
-  program.command('generate').alias('g').option('-t, --type [type]', '生成模式').description('生成APIs Types').action((dir) => {
-    module.exports.generateType = dir.type
-    chalkLog(`${TypeObjs[dir.type]}\n`)
-    require('./commands/generate')
-  })
+  program
+    .command("generate")
+    .alias("g")
+    .option("-t, --type [type]", "生成模式")
+    .description("生成APIs Types")
+    .action((dir) => {
+      const generateType = dir.type || 0;
+      module.exports.generateType = generateType;
+      if ([0, 1, 2].includes(generateType * 1)) {
+        chalkLog(`${TypeObjs[generateType]}\n`);
+        require("./commands/generate");
+      } else {
+        error("无效的type参数 只能是 0 、1、2");
+        process.exit(0);
+      }
+    });
   // program
   //   .command('init')
   //   .description(
