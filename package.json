@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "@openapitools/openapi-generator-cli": "^1.0.15-4.3.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "chalk": "^4.1.0",
     "commander": "^5.1.0",
     "iconv-lite": "^0.6.2",
